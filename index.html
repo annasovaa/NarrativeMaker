@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -34,10 +34,16 @@
         <header class="text-center mb-10">
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2">Narrative Maker</h1>
             <p class="text-xl text-slate-400">Рандомный генератор идей для ваших историй</p>
-            <button id="generateAllButton"
-                    class="mt-6 w-full md:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition shadow-lg shadow-indigo-500/50">
-                Сгенерировать ВСЕ
-            </button>
+            <div class="mt-6 flex flex-col md:flex-row justify-center gap-4">
+                <button id="generateAllButton"
+                        class="w-full md:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition shadow-lg shadow-indigo-500/50">
+                    Сгенерировать ВСЕ
+                </button>
+                <button id="unlockAllButton"
+                        class="w-full md:w-auto px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition shadow-lg shadow-red-500/50">
+                    Снять все закрепления
+                </button>
+            </div>
         </header>
 
         <main id="generator-container" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -48,7 +54,6 @@
     <script>
         // Глобальные переменные для данных
         const DATA = {
-            // --- ОБЩИЕ ПАРАМЕТРЫ ---
             Tema: ["Постапокалипсис", "Фэнтези", "Киберпанк", "Детектив", "Космическая опера", "Мифология", "Выживание", "Историческая", "Психологический триллер", "Приключения"],
             Nazvanie: ["Тень Прошлого", "Звездный Ковчег", "Код Восхода", "Безмолвный Город", "Ключи Судьбы", "Последний Рубеж", "Танец Дракона", "Железная Воля", "Цена Искупления", "Забытый Ритуал"],
             ZhanrIgry: ["Экшен (Action)", "Приключения (Adventure)", "Ролевые игры (RPG)", "Стратегии (Strategy)", "Симуляторы (Simulation)", "Спортивные игры (Sports)", "Гонки (Racing)", "Платформеры (Platformer)", "Хоррор (Horror)", "Файтинг (Fighting)", "Пазлы (Puzzle)", "Шутеры (Shooter)", "Музыкальные игры (Music)", "Рогалики (Roguelike)"],
@@ -65,47 +70,7 @@
     "Кибернетический детектив: Полу-робот, расследующий преступления в будущем.",
     "Генетический инженер: Ученый, создающий новые формы жизни.",
     "Пилот звездолета: Командир космического корабля, ведущий свою команду через галактику.",
-    "Искусственный интеллект: Робот, стремящийся понять человеческую природу.",
-    "Частный сыщик: Умный и проницательный детектив, раскрывающий сложные преступления.",
-    "Полицейский инспектор: Опытный офицер, борющийся с преступностью в большом городе.",
-    "Журналист-расследователь: Репортер, раскрывающий коррупционные схемы.",
-    "Судебный эксперт: Специалист по криминалистике, помогающий раскрывать преступления.",
-    "Адвокат: Защитник, который не только борется в суде, но и расследует дела своих клиентов.",
-    "Романтичная писательница: Молодая женщина, ищущая настоящую любовь в большом городе.",
-    "Фотограф: Художник, который находит любовь через объектив своей камеры.",
-    "Шеф-повар: Талантливый кулинар, который влюбляется в своего конкурента.",
-    "Архитектор: Творческая личность, строящая не только здания, но и отношения.",
-    "Музыкант: Исполнитель, который находит свою музу в неожиданном месте.",
-    "Охотник на монстров: Бесстрашный герой, сражающийся с потусторонними существами.",
-    "Паранормальный исследователь: Человек, изучающий и борющийся с призраками и демонами.",
-    "Выживший: Человек, который пытается выжить в мире, полном зомби.",
-    "Проклятый: Герой, который пытается снять древнее проклятие.",
-    "Вампир: Бессмертное существо, борющееся с собственной темной природой.",
-    "Смелый искатель сокровищ: Отважный авантюрист, отправляющийся на поиски древних артефактов.",
-    "Мореплаватель: Капитан корабля, исследующий неизведанные моря.",
-    "Путешественник во времени: Герой, который перемещается через эпохи, чтобы исправить ошибки прошлого.",
-    "Джунглевый исследователь: Человек, исследующий дикие и опасные места.",
-    "Шпион: Агент, выполняющий секретные миссии по всему миру.",
-    "Рыцарь: Благородный воин, защищающий королевство в средневековые времена.",
-    "Королева: Мудрая правительница, ведущая свой народ через трудные времена.",
-    "Революционер: Герой, борющийся за свободу и справедливость.",
-    "Путешественник: Исследователь, открывающий новые земли и культуры.",
-    "Монах: Человек, посвятивший свою жизнь духовным поискам и помощи другим.",
-    "Изобретатель: Гениальный ученый, создающий удивительные устройства и машины.",
-    "Путешественник во времени: Герой, который перемещается через эпохи, чтобы исправить ошибки прошлого.",
-    "Супергерой: Человек с необычными способностями, защищающий мир от зла.",
-    "Альтернативный историк: Ученый, исследующий параллельные вселенные.",
-    "Киборг: Полу-человек, полу-машина, борющийся за свое место в мире.",
-    "Агент спецслужб: Опытный агент, предотвращающий глобальные угрозы и заговоры.",
-    "Хакер: Гений компьютерных технологий, раскрывающий опасные секреты.",
-    "Журналист: Репортер, расследующий опасные и сенсационные истории.",
-    "Бывший военный: Ветеран, который использует свои навыки для борьбы с преступностью.",
-    "Психолог: Специалист, который помогает раскрывать преступления, анализируя поведение людей.",
-    "Комедийный актер: Веселый и находчивый человек, попадающий в забавные ситуации.",
-    "Неудачливый изобретатель: Человек, чьи изобретения всегда приводят к комичным последствиям.",
-    "Саркастичный писатель: Автор, который постоянно попадает в нелепые ситуации.",
-    "Смешной детектив: Сыщик, который раскрывает преступления с юмором и находчивостью.",
-    "Комичный супергерой: Герой, чьи попытки спасти мир всегда заканчиваются смешными неудачами."],
+    "Искусственный интеллект: Робот, стремящийся понять человеческую природу."],
             Pol: ["Мужчина", "Женщина", "Бесполый"],
             Vozrast: ["до 10", "до 20", "до 30", "до 40", "от 40 до 70", "от 70 до 100"],
             SotsStatus: ["Сирота", "Скиталец", "Король/Королева", "Простой рабочий", "Влиятельный политик", "Изгой", "Гений", "Медиум", "Бюрократ", "Миллионер"],
@@ -141,206 +106,9 @@
                 { id: 'Risovka', label: 'Рисовка', type: 'single' },
             ], colSpan: 1 },
             { id: 'mc', title: 'Главный герой', fields: [
+                { id: 'Hero_MC', label: 'Герой', type: 'single', dataKey: 'heroes' }, // новое поле
                 { id: 'Pol_MC', label: 'Пол', type: 'single', dataKey: 'Pol' },
                 { id: 'Vozrast_MC', label: 'Возраст', type: 'single', dataKey: 'Vozrast' },
                 { id: 'SotsStatus_MC', label: 'Социальный статус', type: 'single', dataKey: 'SotsStatus' },
                 { id: 'Tragediya_MC', label: 'Трагедия', type: 'single', dataKey: 'Tragediya' },
-                { id: 'PolozhKachestva_MC', label: 'Положительные качества', type: 'single', dataKey: 'PolozhKachestva' },
-                { id: 'OtritsKachestva_MC', label: 'Отрицательные качества', type: 'single', dataKey: 'OtritsKachestva' },
-                { id: 'ZhelaniePersonazha_MC', label: 'Желание персонажа', type: 'single', dataKey: 'ZhelaniePersonazha' },
-                { id: 'Professiya_MC', label: 'Профессия', type: 'single', dataKey: 'Professiya' },
-            ], colSpan: 1 },
-            { id: 'other_char', title: 'Персонажи другие', fields: [
-                { id: 'Pol_OC', label: 'Пол', type: 'single', dataKey: 'Pol' },
-                { id: 'Vozrast_OC', label: 'Возраст', type: 'single', dataKey: 'Vozrast' },
-                { id: 'SotsStatus_OC', label: 'Социальный статус', type: 'single', dataKey: 'SotsStatus' },
-                { id: 'Tragediya_OC', label: 'Трагедия', type: 'single', dataKey: 'Tragediya' },
-                { id: 'PolozhKachestva_OC', label: 'Положительные качества', type: 'single', dataKey: 'PolozhKachestva' },
-                { id: 'OtritsKachestva_OC', label: 'Отрицательные качества', type: 'single', dataKey: 'OtritsKachestva' },
-                { id: 'ZhelaniePersonazha_OC', label: 'Желание персонажа', type: 'single', dataKey: 'ZhelaniePersonazha' },
-                { id: 'Professiya_OC', label: 'Профессия', type: 'single', dataKey: 'Professiya' },
-            ], colSpan: 1 },
-            { id: 'setting', title: 'Место действия', fields: [
-                { id: 'MestoPomeshcheniya', label: 'Название помещения', type: 'single' },
-                { id: 'Tsvet_Setting', label: 'Цвет', type: 'single', dataKey: 'Tsvet' },
-                { id: 'Svet_Setting', label: 'Свет', type: 'single', dataKey: 'Svet' },
-                { id: 'Zvuk_Setting', label: 'Звук', type: 'single', dataKey: 'Zvuk' },
-                { id: 'Zapah_Setting', label: 'Запах', type: 'single', dataKey: 'Zapah' },
-                { id: 'Taktilnost_Setting', label: 'Тактильность', type: 'single', dataKey: 'Taktilnost' },
-                { id: 'Vkus_Setting', label: 'Вкус', type: 'single', dataKey: 'Vkus' },
-                { id: 'Vysota_Setting', label: 'Высота', type: 'single', dataKey: 'Vysota' },
-                { id: 'Shirina_Setting', label: 'Ширина', type: 'single', dataKey: 'Shirina' },
-            ], colSpan: 1 },
-            { id: 'mystery', title: 'Тайна', fields: [
-                { id: 'Taina_kto_chto', label: 'Кто/Что', type: 'text' },
-                { id: 'Taina_kogo_chego', label: 'Кого/Чего', type: 'text' },
-                { id: 'Taina_komu_chemu', label: 'Кому/Чему', type: 'text' },
-                { id: 'Taina_kogo_chto', label: 'Кого/Что', type: 'text' },
-                { id: 'Taina_kem_chem', label: 'Кем/Чем', type: 'text' },
-                { id: 'Taina_o_kom_o_chem', label: 'О ком/О чем', type: 'text' },
-                { id: 'Taina_iz_za_chego', label: 'Из-за чего', type: 'text' },
-                { id: 'Taina_pochemu', label: 'Почему', type: 'text' },
-                { id: 'Taina_zachem', label: 'Зачем', type: 'text' },
-                { id: 'Taina_dlya_chego', label: 'Для чего', type: 'text' },
-            ], colSpan: 1 },
-            { id: 'unpleasant', title: 'Неприятное окружение', fields: [
-                { id: 'NeprOk_gde', label: 'Где (место)', type: 'single', dataKey: 'MestoPomeshcheniya' },
-                { id: 'NeprOk_kuda', label: 'Куда (направление)', type: 'text' },
-                { id: 'NeprOk_otkuda', label: 'Откуда (происхождение)', type: 'text' },
-                { id: 'NeprOk_tsvet', label: 'Цвет', type: 'single', dataKey: 'Tsvet' },
-                { id: 'NeprOk_svet', label: 'Свет', type: 'single', dataKey: 'Svet' },
-                { id: 'NeprOk_zapah', label: 'Запах', type: 'single', dataKey: 'Zapah' },
-                { id: 'NeprOk_vysota', label: 'Высота', type: 'single', dataKey: 'Vysota' },
-                { id: 'NeprOk_shirina', label: 'Ширина', type: 'single', dataKey: 'Shirina' },
-                { id: 'NeprOk_zvuk', label: 'Звук', type: 'single', dataKey: 'Zvuk' },
-                { id: 'NeprOk_vkus', label: 'Вкус', type: 'single', dataKey: 'Vkus' },
-                { id: 'NeprOk_taktilnost', label: 'Тактильность', type: 'single', dataKey: 'Taktilnost' },
-            ], colSpan: 1 },
-            { id: 'conflict', title: 'Конфликт', fields: [
-                { id: 'KonfliktPersonazhey', label: 'Конфликт персонажей', type: 'single' },
-                { id: 'KonfliktInteresov', label: 'Конфликт интересов', type: 'single' },
-            ], colSpan: 3 }, // Full width for conflict
-        ];
-
-        // Состояние приложения: хранит текущие значения и статус закрепления
-        let state = {};
-
-        /**
-         * Получает случайное значение из массива данных.
-         * @param {string} dataKey - Ключ в объекте DATA.
-         * @returns {string} Случайное значение.
-         */
-        function getRandomValue(dataKey) {
-            const list = DATA[dataKey];
-            if (!list || list.length === 0) return 'Нет данных';
-            const index = Math.floor(Math.random() * list.length);
-            return list[index];
-        }
-
-        /**
-         * Генерирует и обновляет значение для одного поля.
-         * @param {string} fieldId - ID поля (уникальный ключ).
-         * @param {string} dataKey - Ключ данных в DATA.
-         * @param {string} fieldType - Тип поля ('single' или 'text').
-         */
-        function generateField(fieldId, dataKey, fieldType) {
-            if (state[fieldId] && state[fieldId].isLocked) {
-                // Если поле закреплено, ничего не делаем
-                return;
-            }
-
-            let newValue;
-            if (fieldType === 'single') {
-                // Генерация из предопределенных списков
-                newValue = getRandomValue(dataKey);
-            } else if (fieldType === 'text') {
-                // Генерация заглушки для сложных текстовых полей
-                newValue = `[Сгенерировать идею для '${fieldId.split('_').slice(1).join(' ')}']`;
-            } else {
-                newValue = 'Ошибка типа';
-            }
-
-            state[fieldId] = {
-                value: newValue,
-                isLocked: false,
-            };
-        }
-
-        /**
-         * Переключает статус закрепления (lock/pin) для поля.
-         * @param {string} fieldId - ID поля.
-         */
-        function toggleLock(fieldId) {
-            if (state[fieldId]) {
-                state[fieldId].isLocked = !state[fieldId].isLocked;
-            }
-            render();
-        }
-
-        /**
-         * Главная функция генерации, проходит по всем полям.
-         */
-        function generateAll() {
-            FIELDS_STRUCTURE.forEach(section => {
-                section.fields.forEach(field => {
-                    // Используем field.id для state, а dataKey для DATA. Если dataKey нет, используем field.id.
-                    const dataKey = field.dataKey || field.id;
-                    generateField(field.id, dataKey, field.type);
-                });
-            });
-            render();
-        }
-
-        /**
-         * SVG-иконка для закрепления/открепления (Pushpin from Lucide).
-         * @param {string} fieldId - ID поля.
-         * @param {boolean} isLocked - Статус закрепления.
-         * @returns {string} HTML-строка с SVG.
-         */
-        function getPinIcon(fieldId, isLocked) {
-            const fillClass = isLocked ? 'fill-emerald-400' : 'fill-none stroke-slate-400 hover:stroke-emerald-400';
-            const strokeClass = isLocked ? 'stroke-emerald-400' : 'stroke-slate-400';
-            const title = isLocked ? 'Открепить' : 'Закрепить';
-
-            return `
-                <button onclick="toggleLock('${fieldId}')" title="${title}"
-                    class="p-2 -mr-2 rounded-full transition duration-150 ease-in-out ${isLocked ? 'hover:bg-slate-700' : 'hover:bg-slate-700'}"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                         class="h-5 w-5 pin-icon ${fillClass} ${strokeClass} transition"
-                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14.43 1.93l-4.22 4.22c-.63.63-1.01 1.48-1.01 2.37V22l5-2 5 2V8.52c0-.89-.38-1.74-1.01-2.37l-4.22-4.22a2 2 0 0 0-2.83 0z"/>
-                    </svg>
-                </button>
-            `;
-        }
-
-
-        /**
-         * Отображает текущее состояние в DOM.
-         */
-        function render() {
-            const container = document.getElementById('generator-container');
-            let html = '';
-
-            FIELDS_STRUCTURE.forEach(section => {
-                let sectionContent = section.fields.map(field => {
-                    const fieldState = state[field.id] || { value: '[Нажмите "Сгенерировать ВСЕ"]', isLocked: false };
-                    const lockClass = fieldState.isLocked ? 'locked border-emerald-400 text-emerald-300' : 'border-slate-700 text-slate-200';
-
-                    return `
-                        <div class="space-y-1 ${fieldState.isLocked ? 'bg-slate-700/30 p-2 rounded-lg' : 'p-2 -m-2'} transition">
-                            <label class="block text-sm font-medium text-slate-400">${field.label}</label>
-                            <div class="flex items-center justify-between card p-3 rounded-xl ${lockClass}">
-                                <span class="text-base font-semibold truncate flex-1 pr-4" id="value-${field.id}">
-                                    ${fieldState.value}
-                                </span>
-                                ${getPinIcon(field.id, fieldState.isLocked)}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-                // Создание секции
-                html += `
-                    <div class="card p-6 rounded-2xl col-span-1 ${section.colSpan === 3 ? 'lg:col-span-3' : 'lg:col-span-1'} h-fit">
-                        <h2 class="text-2xl font-bold text-white mb-6 border-b border-indigo-500 pb-2">${section.title}</h2>
-                        <div class="space-y-5">
-                            ${sectionContent}
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        // Инициализация
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('generateAllButton').addEventListener('click', generateAll);
-            // При первой загрузке генерируем начальные значения
-            generateAll();
-        });
-    </script>
-</body>
-</html>
+                { id: 'PolozhKachestva_MC', label: 'Положительные качества', type: 'single
