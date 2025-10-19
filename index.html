@@ -3,112 +3,419 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Narrative Maker: Генератор Нарративов</title>
+    <title>Narrative Maker | Рандомный Генератор Сюжетов</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0f172a; /* Slate-900 */
-            color: #e2e8f0; /* Slate-200 */
+            background-color: #0d1117;
+            color: #c9d1d9;
         }
-        .card {
-            background-color: #1e293b; /* Slate-800 */
-            border: 1px solid #334155; /* Slate-700 */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        .container {
+            max-width: 1200px;
+            padding: 1rem;
         }
-        .pin-icon {
-            transition: transform 0.1s ease-in-out;
+        .section-header {
+            border-bottom: 2px solid #238636;
         }
-        .pin-icon:hover {
-            transform: scale(1.1);
+        .result-item {
+            background-color: #161b22;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.1s, box-shadow 0.1s;
         }
-        .locked .pin-icon {
-            fill: #34d399; /* Emerald-400 */
+        .result-item:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .field-label {
+            color: #8b949e;
+        }
+        .field-value {
+            color: #c9d1d9;
+            font-weight: 500;
+            min-height: 24px; /* Ensure visual consistency */
+        }
+        .pin-button {
+            color: #8b949e;
+            transition: color 0.1s;
+        }
+        .pin-button:hover {
+            color: #58a6ff;
+        }
+        .pinned .pin-icon {
+            color: #238636;
+            fill: #238636;
+        }
+        .pinned {
+            border: 2px solid #238636;
+            box-shadow: 0 0 10px rgba(35, 134, 54, 0.5);
+        }
+        #generate-button {
+            background-color: #238636;
+            transition: background-color 0.1s, transform 0.1s;
+        }
+        #generate-button:hover {
+            background-color: #2ea043;
+            transform: translateY(-1px);
         }
     </style>
 </head>
-<body class="p-4 md:p-8 min-h-screen">
+<body class="min-h-screen">
 
-    <div class="max-w-6xl mx-auto">
-        <header class="text-center mb-10">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2">Narrative Maker</h1>
-            <p class="text-xl text-slate-400">Рандомный генератор идей для ваших историй</p>
-            <div class="mt-6 flex flex-col md:flex-row justify-center gap-4">
-                <button id="generateAllButton"
-                        class="w-full md:w-auto px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition shadow-lg shadow-indigo-500/50">
-                    Сгенерировать ВСЕ
-                </button>
-                <button id="unlockAllButton"
-                        class="w-full md:w-auto px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition shadow-lg shadow-red-500/50">
-                    Снять все закрепления
-                </button>
+    <div class="container mx-auto py-8">
+        <h1 class="text-4xl font-bold mb-6 text-center text-white">Narrative Maker</h1>
+        <p class="text-center mb-8 text-gray-400">Случайный генератор элементов истории. Закрепите поля, чтобы сохранить выбор при следующей генерации.</p>
+
+        <!-- Generate Button -->
+        <div class="flex justify-center mb-10">
+            <button id="generate-button" class="px-8 py-3 rounded-xl font-semibold text-lg text-white shadow-lg focus:outline-none focus:ring-4 focus:ring-green-700/50">
+                Сгенерировать Историю
+            </button>
+        </div>
+
+        <!-- Output Grid -->
+        <div id="narrative-output" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- 1. Основное (General) -->
+            <div class="lg:col-span-3">
+                <h2 class="section-header text-2xl font-semibold pb-2 mb-4">I. Основная Концепция</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <!-- Fields will be dynamically added here -->
+                </div>
             </div>
-        </header>
 
-        <main id="generator-container" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Dynamic content will be inserted here -->
-        </main>
+            <!-- 2. Главный герой (Protagonist) -->
+            <div class="lg:col-span-3">
+                <h2 class="section-header text-2xl font-semibold pb-2 mb-4 mt-6">II. Главный Герой (ГГ)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <!-- Fields will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- 3. Другие персонажи (Other Characters) -->
+            <div class="lg:col-span-3">
+                <h2 class="section-header text-2xl font-semibold pb-2 mb-4 mt-6">III. Другой Персонаж</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <!-- Fields will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- 4. Место действия (Setting) -->
+            <div class="lg:col-span-3">
+                <h2 class="section-header text-2xl font-semibold pb-2 mb-4 mt-6">IV. Место Действия</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Fields will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- 5. Тайна (Mystery) -->
+            <div class="lg:col-span-3">
+                <h2 class="section-header text-2xl font-semibold pb-2 mb-4 mt-6">V. Тайна (Случаи)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <!-- Fields will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- 6. Неприятное окружение (Unpleasant Setting) -->
+            <div class="lg:col-span-3">
+                <h2 class="section-header text-2xl font-semibold pb-2 mb-4 mt-6">VI. Неприятное Окружение</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Fields will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- 7. Конфликты (Conflicts) -->
+            <div class="lg:col-span-3">
+                <h2 class="section-header text-2xl font-semibold pb-2 mb-4 mt-6">VII. Конфликты</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Fields will be dynamically added here -->
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <script>
-        // Глобальные переменные для данных
-        const DATA = {
-            Tema: ["Постапокалипсис", "Фэнтези", "Киберпанк", "Детектив", "Космическая опера", "Мифология", "Выживание", "Историческая", "Психологический триллер", "Приключения"],
-            Nazvanie: ["Тень Прошлого", "Звездный Ковчег", "Код Восхода", "Безмолвный Город", "Ключи Судьбы", "Последний Рубеж", "Танец Дракона", "Железная Воля", "Цена Искупления", "Забытый Ритуал"],
-            ZhanrIgry: ["Экшен (Action)", "Приключения (Adventure)", "Ролевые игры (RPG)", "Стратегии (Strategy)", "Симуляторы (Simulation)", "Спортивные игры (Sports)", "Гонки (Racing)", "Платформеры (Platformer)", "Хоррор (Horror)", "Файтинг (Fighting)", "Пазлы (Puzzle)", "Шутеры (Shooter)", "Музыкальные игры (Music)", "Рогалики (Roguelike)"],
-            ZhanrIstorii: ["Фантастика", "Фэнтези", "Детектив", "Приключения", "Любовный роман", "Исторический роман", "Реалистическая проза", "Автобиография", "Научная литература", "Фольклор", "Юмор", "Психологический триллер", "Мемуары", "Эссе"],
-            Risovka: ["Реализм", "Мультяшный (Cartoon)", "Пиксель-арт (Pixel Art)", "Ретро (Retro)", "Киберпанк (Cyberpunk)", "Фэнтези (Fantasy)", "Аниме (Anime)", "Клеточная анимация (Cel-Shaded)", "Готический (Gothic)"],
+        // Исходные данные, извлеченные из CSV-файлов
+        const NARRATIVE_DATA = {
+            // I. Основная Концепция
+            theme: ["Постапокалипсис", "Фэнтези", "Киберпанк", "Детектив", "Космическая опера", "Мифология", "Выживание", "Историческая", "Психологический триллер", "Приключения"],
+            title: [
+                "Хроники Забытой Звезды", "Последний Код Героя", "Тень над Королевством", "Лабиринт Отражений", "Солнечное Эхо",
+                "Дело о Загадочном Артефакте", "Гнев Древних Богов", "Машина Времени 404", "Город из Стекла и Стали", "Потерянный Ковчег"
+            ],
+            gameGenre: ["Экшен (Action)", "Приключения (Adventure)", "Ролевые игры (RPG)", "Стратегии (Strategy)", "Симуляторы (Simulation)", "Спортивные игры (Sports)", "Гонки (Racing)", "Платформеры (Platformer)", "Хоррор (Horror)", "Файтинг (Fighting)", "Пазлы (Puzzle)", "Шутеры (Shooter)", "Музыкальные игры (Music)", "Рогалики (Roguelike)"],
+            storyGenre: ["Фантастика", "Фэнтези", "Детектив", "Приключения", "Любовный роман", "Исторический роман", "Реалистическая проза", "Фольклор", "Юмор", "Психологический триллер"],
+            artStyle: ["Реализм", "Мультяшный (Cartoon)", "Пиксель-арт (Pixel Art)", "Ретро (Retro)", "Киберпанк (Cyberpunk)", "Фэнтези (Fantasy)", "Аниме (Anime)", "Клеточная анимация (Cel-Shaded)", "Готический (Gothic)"],
 
-            // --- ПЕРСОНАЖИ ---
-            heroes: ["Эльфийский маг: Мудрый и могущественный маг, стремящийся спасти свой мир от зла.",
-    "Драконоборец: Храбрый воин, сражающийся с драконами, чтобы защитить свое королевство.",
-    "Принцесса-воительница: Наследница трона, которая берет меч, чтобы защитить свой народ.",
-    "Темный рыцарь: Герой с таинственным прошлым, стремящийся искупить свои грехи.",
-    "Лесной дух: Защитник природы, обладающий магическими способностями.",
-    "Космический исследователь: Храбрый астронавт, исследующий неизведанные планеты.",
-    "Кибернетический детектив: Полу-робот, расследующий преступления в будущем.",
-    "Генетический инженер: Ученый, создающий новые формы жизни.",
-    "Пилот звездолета: Командир космического корабля, ведущий свою команду через галактику.",
-    "Искусственный интеллект: Робот, стремящийся понять человеческую природу."],
-            Pol: ["Мужчина", "Женщина", "Бесполый"],
-            Vozrast: ["до 10", "до 20", "до 30", "до 40", "от 40 до 70", "от 70 до 100"],
-            SotsStatus: ["Сирота", "Скиталец", "Король/Королева", "Простой рабочий", "Влиятельный политик", "Изгой", "Гений", "Медиум", "Бюрократ", "Миллионер"],
-            Tragediya: ["Герой теряет силу.", "Принцесса узнает, что она дочь злого колдуна.", "Воин теряет товарищей.", "ИИ уничтожает человечество.", "Космонавт теряет связь с Землёй.", "Лучший друг — убийца.", "Любовь всей жизни умирает.", "Герой одержим демоном.", "Предан напарником.", "Теряет семью из-за войны."],
-            PolozhKachestva: ["Храбрый", "Справедливый", "Умный", "Верный", "Оптимистичный", "Самоотверженный", "Харизматичный"],
-            OtritsKachestva: ["Циничный", "Эгоистичный", "Наивный", "Горделивый", "Лживый", "Нерешительный", "Замкнутый"],
-            ZhelaniePersonazha: ["Месть за прошлое", "Найти утерянный артефакт", "Свергнуть тирана", "Обрести семью", "Познать истину", "Вернуться домой", "Изменить прошлое", "Защитить любимого"],
-            Professiya: ["Частный сыщик", "Пилот звездолета", "Эльфийский маг", "Драконоборец", "Агент спецслужб", "Хакер", "Бывший военный", "Автоугонщик", "Генетический инженер", "Комедийный актер"],
+            // II & III. Персонажи
+            protagonistRole: [
+                "Эльфийский маг", "Драконоборец", "Принцесса-воительница", "Темный рыцарь", "Космический исследователь", "Кибернетический детектив",
+                "Частный сыщик", "Полицейский инспектор", "Агент спецслужб", "Хакер", "Бывший военный", "Комедийный актер", "Монах", "Революционер"
+            ],
+            gender: ["Мужчина", "Женщина", "Бесполый"],
+            age: ["до 10 лет", "до 20 лет", "до 30 лет", "до 40 лет", "от 40 до 70 лет", "от 70 до 100 лет"],
+            socialStatus: ["Бедный", "Средний класс", "Богатый", "Изгой", "Знать", "Скиталец", "Крестьянин", "Король/Королева"],
+            tragedy: [
+                "Герой теряет магическую силу", "Учёный создаёт ИИ, который уничтожает человечество", "Детектив обнаруживает, что его лучший друг — убийца",
+                "Любовь всей жизни героя умирает", "Герой становится одержимым демоном", "Герой теряет лучшего друга в путешествии", "Герой теряет семью во время войны",
+                "Герой теряет рассудок из-за постоянного стресса", "Оказывается предателем, не зная об этом", "Космонавт теряет связь с Землёй", "Полицейский подставлен"
+            ],
+            positiveTrait: ["Храбрый", "Добрый", "Умный", "Преданный", "Честный", "Справедливый", "Находчивый", "Ответственный", "Милосердный", "Амбициозный"],
+            negativeTrait: ["Эгоистичный", "Жадный", "Трусливый", "Надменный", "Импульсивный", "Скрытный", "Вспыльчивый", "Циничный", "Наивный", "Лживый"],
+            desire: ["Найти семью", "Свергнуть тирана", "Отомстить", "Стать богатым", "Познать истину", "Вернуть честь", "Найти покой", "Спасти мир", "Доказать свою правоту", "Изменить прошлое"],
+            profession: [
+                "Частный сыщик", "Полицейский инспектор", "Журналист-расследователь", "Судебный эксперт", "Учёный", "Космонавт", "Пилот звездолета", "Наёмник", "Банкир",
+                "Учитель", "Вор-домушник", "Хакер", "Рыцарь", "Монах", "Саркастичный бармен", "Автоугонщик", "Фельдшер", "Снайпер"
+            ],
 
-            // --- МЕСТО ДЕЙСТВИЯ (СЕТТИНГ) ---
-            MestoPomeshcheniya: ["Детская комната", "Спальня", "Столовая", "Гостиная", "Ванная комната", "Кухня", "Гардеробная", "Коридор", "Прихожая", "Погреб"],
-            Tsvet: ["Красный (тревога)", "Синий (покой)", "Желтый (опасность)", "Зеленый (природа)", "Серый (уныние)", "Пурпурный (тайна)"],
-            Svet: ["Направленный", "Рассеянный", "Комбинированное", "Мерцающий", "Полное отсутствие"],
-            Zvuk: ["Звуковые удары", "Шумы", "Музыкальные звуки (тоны)", "Глубокая тишина", "Скрип", "Шелест"],
-            Zapah: ["Цветочные", "Восточные", "Свежие", "Древесные", "Острые", "Плесени", "Дыма"],
-            Taktilnost: ["Нейтрально", "Больно", "Приятно", "Холодно", "Шершаво", "Гладко", "Липко"],
-            Vkus: ["Горький", "Сладкий", "Кислый", "Соленый", "Острый", "Нейтральный"],
-            Vysota: ["Низкая (давит)", "Средняя (комфорт)", "Высокая (пустота)", "Очень высокая"],
-            Shirina: ["Узкая (теснота)", "Средняя (обычная)", "Широкая (простор)", "Огромная"],
+            // IV. Место Действия
+            locationName: [
+                "Волшебный лес", "Средневековый замок", "Космическая станция", "Постапокалиптический город", "Подводный город",
+                "Офис", "Школа", "Заброшенный завод", "Яхта в открытом море", "Тайный клуб", "Древний храм"
+            ],
+            locationColor: ["Тусклый", "Яркий", "Монохромный", "Насыщенный", "Приглушенный", "Холодные тона", "Теплые тона", "Контрастный"],
+            locationLight: ["Направленный свет", "Рассеянный свет", "Комбинированное освещение", "Пульсирующий свет", "Мерцание свечей", "Полная темнота"],
+            locationSound: ["звуковые удары", "шумы", "музыкальные звуки, или тоны", "полная тишина", "эхо", "непрерывный гул"],
+            locationSmell: ["цветочные", "восточные", "фруктовые", "древесные", "озон", "дым", "металл", "гниль", "соль", "старая пыль"],
+            locationTactility: ["нейтрально", "больно (колюще)", "приятно (гладко)", "холодно (влажно)", "жарко (сухо)", "шершаво", "липко"],
+            locationTaste: ["горький", "соленый", "сладкий", "кислый", "умами", "металлический привкус", "пресный"],
+            locationHeight: ["Очень высокий, давящий", "Низкий, интимный", "Стандартный", "Двухуровневый", "Купольный"],
+            locationWidth: ["Невероятно широкий", "Узкий, клаустрофобный", "Стандартный", "Лабиринтообразный", "Неопределенный"],
 
-            // --- КОНФЛИКТ ---
-            KonfliktPersonazhey: ["Борьба за трон: Принцесса-воительница против узурпатора", "Восстание роботов", "Расследование убийства", "Любовный треугольник", "Революция", "Технологическая угроза", "Шпионаж", "Недоразумения"],
-            KonfliktInteresov: ["Недопонимание целей", "Мораль против необходимости", "Личная выгода против долга", "Традиции против прогресса", "Закон против справедливости"]
+            // V. Тайна (Mystery)
+            mysteryWho: ["Неизвестный культ", "Исчезнувший маг", "Корпоративный шпион", "Искусственный интеллект", "Спящий бог", "Тайный орден"],
+            mysteryWhom: ["Героя/её", "Второстепенного персонажа", "Реликвию", "Секретный код", "Ключ от портала"],
+            mysteryToWhom: ["Богатому меценату", "Лидеру повстанцев", "Потерянной любви", "Единственному свидетелю"],
+            mysteryWhat: ["Секретное знание", "Могущественный артефакт", "Причину войны", "Истинное лицо злодея"],
+            mysteryByWhom: ["Древним проклятием", "Последним желанием", "Руками своего брата/сестры", "Непреодолимой силой"],
+            mysteryAboutWhom: ["Историю главного героя", "Происхождение мира", "Будущее королевства", "Предательство внутри команды"],
+            mysteryBecause: ["Из-за жадности", "Из-за любви", "Из-за ошибки в прошлом", "Из-за зависти", "Из-за долга"],
+            mysteryWhy: ["Чтобы скрыть правду", "Потому что не было выбора", "Потому что это единственный способ спасти мир", "Чтобы начать новую жизнь"],
+            mysteryPurpose: ["Затем, чтобы отомстить", "Затем, чтобы получить бессмертие", "Затем, чтобы избежать наказания"],
+            mysteryFor: ["Для спасения своей семьи", "Для восстановления баланса", "Для собственной выгоды"],
+
+            // VI. Неприятное Окружение (Unpleasant Setting)
+            unpleasantPlace: ["Заброшенный склад", "Сточная канава", "Радиоактивная пустошь", "Переполненный рынок", "Тёмный переулок", "Глубокая пещера", "Горячая пустыня", "Ледяной мавзолей"],
+            unpleasantWhere: ["в канализации", "на вершине небоскреба", "в зоне отчуждения", "в катакомбах", "на краю обрыва"],
+            unpleasantTo: ["в логово врага", "на край света", "к запретному городу", "в огненную пропасть"],
+            unpleasantFrom: ["из тюрьмы", "от преследования", "с поля битвы", "от руин"],
+
+            // VII. Конфликты
+            characterConflict: [
+                "Борьба за трон: Принцесса-воительница против узурпатора", "Восстание роботов: Люди против восставших роботов", "Расследование убийства: Частный сыщик против серийного убийцы",
+                "Революция: Революционер против правящего режима", "Шпионаж: Агент спецслужб против международной шпионской сети", "Поиск артефакта: Группа героев против злого мага",
+                "Этическая дилемма: Генетический инженер против общества", "Коррупция в полиции: Инспектор против коррумпированных коллег", "Психологическая игра: Психолог против серийного убийцы"
+            ],
+            interestConflict: ["Власть против Свободы", "Долг против Любви", "Порядок против Хаоса", "Наука против Веры", "Прогресс против Традиций", "Справедливость против Мести", "Выживание против Морали"],
         };
 
-        // Структура полей для генерации и отображения
+        // Структура полей, используемая для генерации UI и логики
         const FIELDS_STRUCTURE = [
-            { id: 'general', title: 'Общие параметры', fields: [
-                { id: 'Tema', label: 'Тема', type: 'single' },
-                { id: 'Nazvanie', label: 'Название', type: 'single' },
-                { id: 'ZhanrIgry', label: 'Жанр игры', type: 'single' },
-                { id: 'ZhanrIstorii', label: 'Жанр истории', type: 'single' },
-                { id: 'Risovka', label: 'Рисовка', type: 'single' },
-            ], colSpan: 1 },
-            { id: 'mc', title: 'Главный герой', fields: [
-                { id: 'Hero_MC', label: 'Герой', type: 'single', dataKey: 'heroes' }, // новое поле
-                { id: 'Pol_MC', label: 'Пол', type: 'single', dataKey: 'Pol' },
-                { id: 'Vozrast_MC', label: 'Возраст', type: 'single', dataKey: 'Vozrast' },
-                { id: 'SotsStatus_MC', label: 'Социальный статус', type: 'single', dataKey: 'SotsStatus' },
-                { id: 'Tragediya_MC', label: 'Трагедия', type: 'single', dataKey: 'Tragediya' },
-                { id: 'PolozhKachestva_MC', label: 'Положительные качества', type: 'single
+            { id: "general", title: "I. Основная Концепция", parent: '.lg\\:col-span-3:nth-child(1) .grid', fields: [
+                { key: "theme", label: "Тема" },
+                { key: "title", label: "Название" },
+                { key: "gameGenre", label: "Жанр игры" },
+                { key: "storyGenre", label: "Жанр истории" },
+                { key: "artStyle", label: "Рисовка" },
+            ]},
+            { id: "hero", title: "II. Главный Герой", parent: '.lg\\:col-span-3:nth-child(2) .grid', fields: [
+                { key: "protagonistRole", label: "Кто он" },
+                { key: "gender", label: "Пол" },
+                { key: "age", label: "Возраст" },
+                { key: "socialStatus", label: "Социальный статус" },
+                { key: "tragedy", label: "Трагедия" },
+                { key: "positiveTrait", label: "Положительные качества" },
+                { key: "negativeTrait", label: "Отрицательные качества" },
+                { key: "desire", label: "Желание персонажа" },
+                { key: "profession", label: "Профессия" },
+            ]},
+            { id: "otherCharacter", title: "III. Другой Персонаж", parent: '.lg\\:col-span-3:nth-child(3) .grid', fields: [
+                { key: "gender_oc", label: "Пол" },
+                { key: "age_oc", label: "Возраст" },
+                { key: "socialStatus_oc", label: "Социальный статус" },
+                { key: "tragedy_oc", label: "Трагедия" },
+                { key: "positiveTrait_oc", label: "Положительные качества" },
+                { key: "negativeTrait_oc", label: "Отрицательные качества" },
+                { key: "desire_oc", label: "Желание персонажа" },
+                { key: "profession_oc", label: "Профессия" },
+            ]},
+            { id: "setting", title: "IV. Место Действия", parent: '.lg\\:col-span-3:nth-child(4) .grid', fields: [
+                { key: "locationName", label: "Название помещения" },
+                { key: "locationColor", label: "Цвет" },
+                { key: "locationLight", label: "Свет" },
+                { key: "locationSound", label: "Звук" },
+                { key: "locationSmell", label: "Запах" },
+                { key: "locationTactility", label: "Тактильность" },
+                { key: "locationTaste", label: "Вкус" },
+                { key: "locationHeight", label: "Высота" },
+                { key: "locationWidth", label: "Ширина" },
+            ]},
+            { id: "mystery", title: "V. Тайна", parent: '.lg\\:col-span-3:nth-child(5) .grid', fields: [
+                { key: "mysteryWho", label: "Кто/Что" },
+                { key: "mysteryWhom", label: "Кого/Чего" },
+                { key: "mysteryToWhom", label: "Кому/Чему" },
+                { key: "mysteryWhat", label: "Кого/Что" },
+                { key: "mysteryByWhom", label: "Кем/Чем" },
+                { key: "mysteryAboutWhom", label: "О ком/О чем" },
+                { key: "mysteryBecause", label: "Из-за чего" },
+                { key: "mysteryWhy", label: "Почему" },
+                { key: "mysteryPurpose", label: "Зачем" },
+                { key: "mysteryFor", label: "Для чего" },
+            ]},
+            { id: "unpleasant", title: "VI. Неприятное Окружение", parent: '.lg\\:col-span-3:nth-child(6) .grid', fields: [
+                { key: "unpleasantPlace", label: "Место" },
+                { key: "unpleasantWhere", label: "Где" },
+                { key: "unpleasantTo", label: "Куда" },
+                { key: "unpleasantFrom", label: "Откуда" },
+                { key: "locationColor_u", label: "Цвет" },
+                { key: "locationLight_u", label: "Свет" },
+                { key: "locationSmell_u", label: "Запах" },
+                { key: "locationHeight_u", label: "Высота" },
+                { key: "locationWidth_u", label: "Ширина" },
+                { key: "locationSound_u", label: "Звук" },
+                { key: "locationTaste_u", label: "Вкус" },
+                { key: "locationTactility_u", label: "Тактильность" },
+            ]},
+            { id: "conflict", title: "VII. Конфликты", parent: '.lg\\:col-span-3:nth-child(7) .grid', fields: [
+                { key: "characterConflict", label: "Конфликт персонажей" },
+                { key: "interestConflict", label: "Конфликт интересов" },
+            ]},
+        ];
+
+        // Глобальное состояние приложения
+        let narrativeState = {};
+
+        // --- Утилиты ---
+
+        /**
+         * Возвращает случайный элемент из массива.
+         * @param {string} key - Ключ в NARRATIVE_DATA.
+         * @returns {string} Случайное значение.
+         */
+        function generateRandomValue(key) {
+            // Для Другого Персонажа и Неприятного окружения используем общие ключи данных
+            const dataKey = key.endsWith('_oc') ? key.slice(0, -3) : (key.endsWith('_u') ? key.slice(0, -2) : key);
+
+            const data = NARRATIVE_DATA[dataKey];
+            if (!data || data.length === 0) {
+                console.error(`Нет данных для ключа: ${dataKey}`);
+                return "Нет данных";
+            }
+            const randomIndex = Math.floor(Math.random() * data.length);
+            return data[randomIndex];
+        }
+
+        /**
+         * Генерирует HTML-разметку для одного поля.
+         * @param {string} key - Уникальный ключ поля.
+         * @param {string} label - Название поля.
+         * @returns {string} HTML-строка.
+         */
+        function createFieldHTML(key, label) {
+            // Иконка булавки (Pin Icon - Lucide-react equivalent)
+            const pinIcon = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="pin-icon">
+                    <path d="M12.7 20.7l-7.35 1.54L2 14.7l1.54-7.35 6.36 6.36 7.35-1.54-1.54 7.35z"/>
+                    <path d="M18.87 5.13l-1.42 1.42"/>
+                    <path d="M21.5 2.5l-2.12 2.12"/>
+                    <path d="M15.42 8.58l-1.42 1.42"/>
+                </svg>
+            `;
+
+            return `
+                <div id="field-${key}" data-key="${key}" class="result-item flex flex-col justify-between rounded-lg p-4 transition-all duration-300">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="field-label text-sm uppercase tracking-wider">${label}</div>
+                        <button class="pin-button ml-2 p-1 rounded-full hover:bg-gray-800" data-key="${key}" title="Закрепить/открепить">
+                            ${pinIcon}
+                        </button>
+                    </div>
+                    <div class="field-value text-base break-words">...</div>
+                </div>
+            `;
+        }
+
+        /**
+         * Инициализация UI.
+         */
+        function initializeUI() {
+            FIELDS_STRUCTURE.forEach(section => {
+                const parentElement = document.querySelector(section.parent);
+                if (!parentElement) return;
+
+                section.fields.forEach(field => {
+                    parentElement.innerHTML += createFieldHTML(field.key, field.label);
+                    // Инициализация состояния
+                    narrativeState[field.key] = {
+                        value: '',
+                        isPinned: false
+                    };
+                });
+            });
+
+            // Навешивание слушателей на кнопки закрепления
+            document.querySelectorAll('.pin-button').forEach(button => {
+                button.addEventListener('click', togglePin);
+            });
+
+            // Первая генерация
+            generateNarrative();
+        }
+
+        /**
+         * Переключает состояние закрепления поля.
+         * @param {Event} event - Событие клика.
+         */
+        function togglePin(event) {
+            const button = event.currentTarget;
+            const key = button.dataset.key;
+            const itemElement = document.getElementById(`field-${key}`);
+
+            narrativeState[key].isPinned = !narrativeState[key].isPinned;
+
+            if (narrativeState[key].isPinned) {
+                itemElement.classList.add('pinned');
+                button.setAttribute('title', 'Открепить');
+            } else {
+                itemElement.classList.remove('pinned');
+                button.setAttribute('title', 'Закрепить');
+            }
+        }
+
+        /**
+         * Главная функция генерации нарратива.
+         */
+        function generateNarrative() {
+            for (const key in narrativeState) {
+                if (!narrativeState[key].isPinned) {
+                    const newValue = generateRandomValue(key);
+                    narrativeState[key].value = newValue;
+                }
+
+                // Обновление UI
+                const valueElement = document.querySelector(`#field-${key} .field-value`);
+                if (valueElement) {
+                    valueElement.textContent = narrativeState[key].value;
+                }
+            }
+            
+            // Если "Название" не закреплено, генерируем его с учетом "Темы" и "Жанра"
+            if (!narrativeState['title'].isPinned) {
+                const theme = narrativeState['theme'].value.split(' ')[0]; // Берем только первое слово
+                const genre = narrativeState['storyGenre'].value.split(' ')[0];
+                const baseTitles = NARRATIVE_DATA.title;
+                const newTitle = `${baseTitles[Math.floor(Math.random() * baseTitles.length)]} (${theme} / ${genre})`;
+                narrativeState['title'].value = newTitle;
+                document.querySelector('#field-title .field-value').textContent = newTitle;
+            }
+        }
+
+        // --- Запуск ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeUI();
+            document.getElementById('generate-button').addEventListener('click', generateNarrative);
+        });
+    </script>
+</body>
+</html>
